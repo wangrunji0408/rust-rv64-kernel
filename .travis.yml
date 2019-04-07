@@ -1,0 +1,29 @@
+sudo: false
+
+dist: xenial
+
+language: rust
+
+rust: nightly
+
+os:
+  - linux
+  - osx
+
+cache:
+  cargo: true
+  directories:
+    - $HOME/Library/Caches/Homebrew
+    - $TRAVIS_BUILD_DIR/qemu-3.1.0
+
+addons:
+  homebrew:
+    packages:
+      - qemu
+
+install:
+  - make env
+  - make opensbi
+
+script:
+  - make build

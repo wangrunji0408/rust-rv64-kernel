@@ -17,10 +17,12 @@ run:
 		-kernel opensbi/platform/qemu/virt/firmware/fw_jump.elf \
 		-device loader,file=$(bin),addr=0x80200000
 
+build: bin
+
 bin: $(elf)
 	$(objcopy) -O binary $(elf) $(bin)
 
-build:
+elf:
 	cargo build --target riscv64imac-unknown-none-elf --release
 
 asm:
@@ -31,5 +33,5 @@ sym:
 
 $(bin): bin
 
-$(elf): build
+$(elf): elf
 	
