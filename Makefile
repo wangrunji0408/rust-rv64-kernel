@@ -10,9 +10,9 @@ env:
 opensbi:
 	wget https://github.com/riscv/opensbi/releases/download/v0.3/opensbi-0.3-rv64-bin.tar.xz
 	tar -xf opensbi-0.3-rv64-bin.tar.xz
-	mv opensbi-0.3-rv64-bin.tar.xz opensbi
+	mv opensbi-0.3-rv64-bin opensbi
 
-run:
+run: env build opensbi
 	qemu-system-riscv64 -M virt -m 256M -nographic -serial mon:stdio \
 		-kernel opensbi/platform/qemu/virt/firmware/fw_jump.elf \
 		-device loader,file=$(bin),addr=0x80200000
@@ -23,7 +23,7 @@ bin: $(elf)
 	$(objcopy) -O binary $(elf) $(bin)
 
 elf:
-	cargo build --target riscv64imac-unknown-none-elf --release
+	cargo xbuild --target riscv64imac-unknown-none-elf --release
 
 asm:
 	$(objdump) -d $(elf) | less
@@ -34,4 +34,3 @@ sym:
 $(bin): bin
 
 $(elf): elf
-	
